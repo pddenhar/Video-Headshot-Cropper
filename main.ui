@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>952</width>
-    <height>688</height>
+    <width>1196</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -70,8 +70,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>668</width>
-           <height>610</height>
+           <width>912</width>
+           <height>708</height>
           </rect>
          </property>
          <widget class="QLabel" name="imageLabel">
@@ -102,6 +102,14 @@
          <widget class="QLabel" name="templateLabel">
           <property name="enabled">
            <bool>true</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>1920</width>
+            <height>1080</height>
+           </rect>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">

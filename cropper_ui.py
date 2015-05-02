@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Sat May  2 00:44:34 2015
+# Created: Sat May  2 01:09:30 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(952, 688)
+        MainWindow.resize(1196, 786)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.centralwidget)
@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 668, 610))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 912, 708))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.imageLabel = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.imageLabel.setGeometry(QtCore.QRect(110, 120, 58, 15))
@@ -79,6 +79,7 @@ class Ui_MainWindow(object):
         self.imageLabel.setObjectName(_fromUtf8("imageLabel"))
         self.templateLabel = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.templateLabel.setEnabled(True)
+        self.templateLabel.setGeometry(QtCore.QRect(0, 0, 1920, 1080))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
