@@ -14,20 +14,22 @@ class Cropper(QMainWindow):
         self.imageXOffset = 0
         self.imageYOffset = 0
         self.initPos = 50
+        self.initScale = .4
+        self.ui.templateLabel.move(self.initPos, self.initPos)
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
-        elif e.key() == QtCore.Qt.Key_Plus:
+        if e.key() == QtCore.Qt.Key_Plus:
             self.zoomFrame(.005)
-        elif e.key() == QtCore.Qt.Key_Minus:
+        if e.key() == QtCore.Qt.Key_Minus:
             self.zoomFrame(-.005)
-        elif e.key() == QtCore.Qt.Key_W:
+        if e.key() == QtCore.Qt.Key_W:
             self.moveImage(0,3)
-        elif e.key() == QtCore.Qt.Key_S:
+        if e.key() == QtCore.Qt.Key_S:
             self.moveImage(0,-3)
-        elif e.key() == QtCore.Qt.Key_A:
+        if e.key() == QtCore.Qt.Key_A:
             self.moveImage(-3,0)
-        elif e.key() == QtCore.Qt.Key_D:
+        if e.key() == QtCore.Qt.Key_D:
             self.moveImage(3,0)
     def openFolder(self):
         self.files = []
@@ -44,14 +46,32 @@ class Cropper(QMainWindow):
                 self.files += [(root, f)]
                 self.ui.fileList.addItem(QListWidgetItem(f))
     def renderVideo(self):
-        print "stinker"
+        finalScale = (self.imageScale / self.initScale)
+        bounds_height = int(1080 / finalScale)
+        bounds_width = int(1920 / finalScale)
+        print bounds_width, bounds_height
+        x = int(-self.imageXOffset/self.imageScale + (1920 - bounds_width) / 2)
+        y = int(self.imageYOffset/self.imageScale + (1080 - bounds_height) / 2)
+        print x, y
+        if finalScale < 1:
+            QtGui.QMessageBox.information(self, "Image Cropper","A crop scale of "+str(finalScale)+" is not a crop")
+            return
+        cropString = "crop={0}:{1}:{2}:{3}".format(bounds_width, bounds_height,
+         self.imageXOffset, self.imageYOffset)
+        command = ["avconv",
+            '-i', self.openFile,
+            '-filter:v', cropString,
+            '-an',
+            '/home/peter/Desktop/out.mp4'
+        ]
+        sp.call(command)
     def nextVideo(self):
         if self.currentFileIndex < len(self.files):
             openFile = self.files[self.currentFileIndex]
-            openFile = openFile[0] + "/" + openFile[1]
+            self.openFile = openFile[0] + "/" + openFile[1]
             self.currentFileIndex += 1
         command = [ "avconv",
-            '-i', openFile,
+            '-i', self.openFile,
             '-vcodec', 'png',
             '-ss', '1',
             '-vframes', '1',
@@ -62,16 +82,13 @@ class Cropper(QMainWindow):
         sp.call(command)
         image = QImage("/tmp/frame.png")
         if image.isNull():
-            QtGui.QMessageBox.information(self, "Image Viewer",
+            QtGui.QMessageBox.information(self, "Image Loader",
                         "Cannot load frame from %s.", openFile)
             return
         self.ui.imageLabel.setPixmap(QPixmap.fromImage(image))
         self.ui.templateLabel.setVisible(True)
-        self.setScale(.4)
-        self.positionStuff()
-    def positionStuff(self):
-        self.ui.templateLabel.move(self.initPos, self.initPos);
-        self.ui.imageLabel.move(self.initPos, self.initPos);
+        self.setScale(self.initScale)
+        self.zoomFrame(0)
     def setScale(self, scaleFactor):
         self.templateScale = scaleFactor
         self.imageScale = scaleFactor
