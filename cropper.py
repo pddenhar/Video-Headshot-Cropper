@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys, os
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import *
@@ -15,6 +16,7 @@ class Cropper(QMainWindow):
         self.imageYOffset = 0
         self.initPos = 50
         self.initScale = .4
+        self.imageScale = self.initScale
         self.ui.templateLabel.move(self.initPos, self.initPos)
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
@@ -56,22 +58,23 @@ class Cropper(QMainWindow):
         if finalScale < 1:
             QtGui.QMessageBox.information(self, "Image Cropper","A crop scale of "+str(finalScale)+" is not a crop")
             return
-        cropString = "crop={0}:{1}:{2}:{3}".format(bounds_width, bounds_height,
-         self.imageXOffset, self.imageYOffset)
+        cropString = "crop={0}:{1}:{2}:{3}".format(bounds_width, bounds_height, x, y)
         command = ["avconv",
             '-i', self.openFile,
             '-filter:v', cropString,
             '-an',
-            '/home/peter/Desktop/out.mp4'
+            '/home/peter/Desktop/cropped/' + openFile[1]
         ]
+        print command
         sp.call(command)
     def nextVideo(self):
         if self.currentFileIndex < len(self.files):
             openFile = self.files[self.currentFileIndex]
-            self.openFile = openFile[0] + "/" + openFile[1]
+            self.openFile = openFile
+            openFile = openFile[0] + "/" + openFile[1]
             self.currentFileIndex += 1
         command = [ "avconv",
-            '-i', self.openFile,
+            '-i', openFile,
             '-vcodec', 'png',
             '-ss', '1',
             '-vframes', '1',
@@ -91,7 +94,7 @@ class Cropper(QMainWindow):
         self.zoomFrame(0)
     def setScale(self, scaleFactor):
         self.templateScale = scaleFactor
-        self.imageScale = scaleFactor
+        #self.imageScale = scaleFactor
         self.ui.imageLabel.adjustSize()
         self.ui.templateLabel.adjustSize()
         self.ui.imageLabel.resize(scaleFactor * self.ui.imageLabel.pixmap().size())
