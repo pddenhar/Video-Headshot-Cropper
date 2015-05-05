@@ -49,17 +49,18 @@ class Cropper(QMainWindow):
                 self.ui.fileList.addItem(QListWidgetItem(f))
     def renderVideo(self):
         finalScale = (self.imageScale / self.initScale)
-        bounds_height = int(1080 / finalScale)
-        bounds_width = int(1920 / finalScale)
+        video_width = self.ui.imageLabel.pixmap().size().width()
+        video_height = self.ui.imageLabel.pixmap().size().height()
+        bounds_height = int(video_height / finalScale)
+        bounds_width = int(video_width / finalScale)
         print bounds_width, bounds_height
-        x = int(-self.imageXOffset/self.imageScale + (1920 - bounds_width) / 2)
-        y = int(self.imageYOffset/self.imageScale + (1080 - bounds_height) / 2)
+        x = int(-self.imageXOffset/self.imageScale + (video_width - bounds_width) / 2)
+        y = int(self.imageYOffset/self.imageScale + (video_height - bounds_height) / 2)
         print x, y
         if finalScale < 1:
             QtGui.QMessageBox.information(self, "Image Cropper","A crop scale of "+str(finalScale)+" is not a crop")
             return
-        elif x + bounds_width > self.ui.imageLabel.pixmap().size().width() or \
-            y + bounds_height > self.ui.imageLabel.pixmap().size().height() or \
+        elif x + bounds_width > video_width or y + bounds_height > video_height or \
             x < 0 or y < 0:
             QtGui.QMessageBox.information(self, "Image Cropper", "You are trying to crop outside of the video bounds.")
             return
