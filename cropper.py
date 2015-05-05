@@ -58,15 +58,21 @@ class Cropper(QMainWindow):
         if finalScale < 1:
             QtGui.QMessageBox.information(self, "Image Cropper","A crop scale of "+str(finalScale)+" is not a crop")
             return
+        elif x + bounds_width > self.ui.imageLabel.pixmap().size().width() or \
+            y + bounds_height > self.ui.imageLabel.pixmap().size().height() or \
+            x < 0 or y < 0:
+            QtGui.QMessageBox.information(self, "Image Cropper", "You are trying to crop outside of the video bounds.")
+            return
         cropString = "crop={0}:{1}:{2}:{3}".format(bounds_width, bounds_height, x, y)
         command = ["avconv",
-            '-i', self.openFile,
+            '-i', self.openFile[0] +'/' + self.openFile[1],
             '-filter:v', cropString,
             '-an',
-            '/home/peter/Desktop/cropped/' + openFile[1]
+            '/home/peter/Desktop/cropped/' + self.openFile[1]
         ]
         print command
         sp.call(command)
+        self.nextVideo()
     def nextVideo(self):
         if self.currentFileIndex < len(self.files):
             openFile = self.files[self.currentFileIndex]
