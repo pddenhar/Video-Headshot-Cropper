@@ -93,7 +93,7 @@ class Cropper(QMainWindow):
         image = QImage("/tmp/frame.png")
         if image.isNull():
             QtGui.QMessageBox.information(self, "Image Loader",
-                        "Cannot load frame from %s.", openFile)
+                        "Cannot load headshot frame from %s.", openFile)
             return
         self.ui.imageLabel.setPixmap(QPixmap.fromImage(image))
         self.ui.templateLabel.setVisible(True)
